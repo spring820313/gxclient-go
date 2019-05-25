@@ -28,7 +28,7 @@ func (p Votes) MarshalTransaction(enc *transaction.Encoder) error {
 		votes[idx] = id
 	}
 
-	sort.Sort(votes, voteIDComparator)
+	sort.Sort(votes, VoteIDComparator)
 	for _, v := range votes {
 		if err := enc.Encode(v); err != nil {
 			return errors.Annotate(err, "encode VoteID")
@@ -70,6 +70,10 @@ func (p *VoteID) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (p VoteID) GetType() int {
+	return p.typ
+}
+
 func (p VoteID) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf(`"%d:%d"`, p.typ, p.instance)), nil
 }
@@ -93,7 +97,25 @@ func NewVoteID(id string) *VoteID {
 	return &v
 }
 
-func voteIDComparator(a, b interface{}) int {
+func NewVoteIDV2(id string) *VoteID {
+	v := VoteID{}
+	kov := strings.Split(id, ":")
+	if len(kov) != 2 {
+		return nil
+	}
+
+	var err error
+	if v.typ, err = strconv.Atoi(kov[0]); err != nil {
+		return nil
+	}
+
+	if v.instance, err = strconv.Atoi(kov[1]); err != nil {
+		return nil
+	}
+	return &v
+}
+
+func VoteIDComparator(a, b interface{}) int {
 	aID := a.(VoteID)
 	bID := b.(VoteID)
 

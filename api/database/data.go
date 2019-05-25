@@ -108,61 +108,39 @@ func (o *AccountsMap) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-type Struct struct {
-	Name	   						string `json:"name"`
-	Base							string `json:"base"`
-	Fields							[]Field `json:"fields"`
+type TableRowsParams struct {
+	LowerBound	   						int64 `json:"lower_bound"`
+	UpperBound							int64 `json:"upper_bound"`
+	IndexPosition						int64 `json:"index_position"`
+	Limit								int64 `json:"limit"`
+	Reverse								bool `json:"reverse"`
 }
 
-type Table struct {
-	Name	   						string `json:"name"`
-	IndexType						string `json:"index_type"`
-	KeyNames						[]string `json:"key_names"`
-	KeyTypes						[]string `json:"key_types"`
-	Type							string `json:"type"`
+func NewTableRowsParams() TableRowsParams {
+	return TableRowsParams{0, -1, 1, 10, false}
 }
 
-type Field struct {
-	Name	   						string `json:"name"`
-	Type							string `json:"type"`
+type Witness struct {
+	Id	   						string `json:"id"`
+	IsValid						bool `json:"is_valid"`
+	LastAslot					uint64 `json:"last_aslot"`
+	LastConfirmedBlockNum		int64 `json:"last_confirmed_block_num"`
+	PayVb						string `json:"pay_vb"`
+	SigningKey					string `json:"signing_key"`
+	TotalMissed					uint64 `json:"total_missed"`
+	TotalVotes					uint64 `json:"total_votes"`
+	Url							string `json:"url"`
+	VoteId						string `json:"vote_id"`
+	WitnessAccount				string `json:"witness_account"`
 }
 
-type Action struct {
-	Name	   						string `json:"name"`
-	Type							string `json:"type"`
-	Payable							bool `json:"payable"`
-}
-
-type Abi struct {
-	Version	   						string `json:"version"`
-	Types							[]interface{} `json:"types"`
-	Structs							[]Struct `json:"structs"`
-	Actions							[]Action `json:"actions"`
-	Tables							[]Table `json:"tables"`
-	ErrorMessages					[]interface{} `json:"error_messages"`
-	AbiExtensions					[]interface{} `json:"abi_extensions"`
-}
-
-type ContractAccountProperties struct {
-	ID                             	types.ObjectID `json:"id"`
-	MembershipExpirationDate	   	string `json:"membership_expiration_date"`
-	Registrar						string `json:"registrar"`
-	Referrer						string `json:"referrer"`
-	LifetimeReferrer				string `json:"lifetimeReferrer"`
-	NetworkFeePercentage			int64 `json:"networkFeePercentage"`
-	LifetimeReferrerFeePercentage	int64 `json:"lifetime_referrer_fee_percentage"`
-	ReferrerRewardsPercentage		int64 `json:"referrer_rewards_percentage"`
-	Name 							string `json:"name"`
-	Statistics 						string `json:"statistics"`
-	WhitelistingAccounts			[]string `json:"whitelisting_accounts"`
-	BlacklistingAccounts			[]string `json:"blacklisting_accounts"`
-	WhitelistedAccounts				[]string `json:"whitelisted_accounts"`
-	BlacklistedAccounts				[]string `json:"blacklisted_accounts"`
-	XAbi							Abi `json:"abi"`
-	VmType							string `json:"vm_type"`
-	VmVersion						string `json:"vm_version"`
-	Code							string `json:"code"`
-	CodeVersion						string `json:"code_version"`
+type Committee struct {
+	Id	   						string `json:"id"`
+	PayVb						string `json:"committee_member_account"`
+	VoteId						string `json:"vote_id"`
+	TotalVotes					uint64 `json:"total_votes"`
+	Url							string `json:"url"`
+	IsValid						bool `json:"is_valid"`
 }
 
 

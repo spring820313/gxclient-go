@@ -88,7 +88,7 @@ func NewHttpTransport(url string) (*HttpTransport, error) {
 
 func (p *HttpTransport) Connect() error {
 	p.Client = &http.Client{
-		Timeout: 10 * time.Second,
+		Timeout: 20 * time.Second,
 	}
 
 	p.decBuf = new(bytes.Buffer)

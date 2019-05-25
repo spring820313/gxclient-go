@@ -116,11 +116,90 @@ func (api *API) GetAccountByName(account string) (*types.Account, error) {
 	return resp, err
 }
 
+func (api *API) GetAccounts(accounts... string) ([]*types.Account, error) {
+	ret := make([]*types.Account, len(accounts))
+	for i, account := range accounts {
+		a, err := api.GetAccountByName(account)
+		if err != nil {
+			return nil, err
+		}
+		ret[i] = a
+	}
+	return ret, nil
+}
+
 //get_contract_account_by_name
-func (api *API) GetContractAccountByName(account string) (*ContractAccountProperties, error) {
-	var resp *ContractAccountProperties
+func (api *API) GetContractAccountByName(account string) (*types.ContractAccountProperties, error) {
+	var resp *types.ContractAccountProperties
 	err := api.call("get_account_by_name", []interface{}{account}, &resp)
 	return resp, err
+}
+
+//get_contract_account_by_name
+func (api *API) GetWitnessByAccount(accountId string) (*Witness, error) {
+	var resp *Witness
+	err := api.call("get_witness_by_account", []interface{}{accountId}, &resp)
+	return resp, err
+}
+
+func (api *API) GetCommitteeMemberByAccount(accountId string) (*Committee, error) {
+	var resp *Committee
+	err := api.call("get_committee_member_by_account", []interface{}{accountId}, &resp)
+	return resp, err
+}
+
+func (api *API) GetVoteIdsByAccounts(accountNames... string) ([]string, error) {
+	accouts, err := api.GetAccounts(accountNames...)
+	if err != nil {
+		return nil, err
+	}
+	ret := []string {}
+	for _, account := range accouts {
+		id := account.ID.String()
+		var wit *Witness
+		if wit, err = api.GetWitnessByAccount(id);  err != nil {
+			return nil ,err
+		}
+		ret = append(ret, wit.VoteId)
+
+		var com *Committee
+		if com, err = api.GetCommitteeMemberByAccount(id); err != nil {
+			return nil, err
+		}
+		ret = append(ret, com.VoteId)
+	}
+	return ret, nil
+}
+
+func (api *API) GetContractTable(account string) (*[]types.Table, error) {
+	abi, err := api.GetContractABI(account)
+	if err != nil {
+		return nil, err
+	}
+	return &abi.Tables, err
+}
+
+func (api *API) GetContractABI(account string) (*types.Abi, error) {
+	cap, err := api.GetContractAccountByName(account)
+	if err != nil {
+		return nil, err
+	}
+	return &cap.XAbi, err
+}
+
+//serialize_contract_call_args
+func (api *API) SerializeContractParams(contractName, method string, parameters interface{}) (string, error) {
+	var param string
+	if parameters == nil {
+		param = "{}"
+	} else {
+		jsonbyts,_ := json.Marshal(parameters)
+		param = string(jsonbyts[:])
+	}
+
+	var resp *string
+	err := api.call("serialize_contract_call_args", []interface{}{contractName, method, param}, &resp)
+	return *resp, err
 }
 
 //get_key_references
@@ -131,6 +210,20 @@ func (api *API) GetAccountsByPublicKeys(publicKeys ...string) (*[][]string, erro
 		pubs[i] = pub
 	}
 	err := api.call("get_key_references", []interface{}{pubs}, &resp)
+	return resp, err
+}
+
+//get_table_rows
+func (api *API) GetTableRows(contractName, tableName string, lowerBound, upperBound int64) (*interface{}, error) {
+	var resp *interface{}
+	err := api.call("get_table_rows", []interface{}{contractName, tableName, lowerBound, upperBound}, &resp)
+	return resp, err
+}
+
+//get_table_rows_ex
+func (api *API) GetTableObjects(contractName, tableName string, params TableRowsParams) (*interface{}, error) {
+	var resp *interface{}
+	err := api.call("get_table_rows_ex", []interface{}{contractName, tableName, params}, &resp)
 	return resp, err
 }
 
@@ -211,6 +304,10 @@ func (api *API) GetRequiredFee(ops []types.Operation, assetID string) ([]types.A
 
 		opsJSON = append(opsJSON, opArr)
 	}
+
+	jsonbyts3,_ := json.Marshal(opsJSON)
+	ret3 := string(jsonbyts3[:])
+	println(ret3)
 
 	err := api.call("get_required_fees", []interface{}{opsJSON, assetID}, &resp)
 	return resp, err

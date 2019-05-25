@@ -32,9 +32,29 @@ type Int64 int64
 
 type AssetType Int8
 
+func (num UInt8) MarshalTransaction(enc *transaction.Encoder) error {
+	return enc.EncodeNumber(uint8(num))
+}
+
+func (num UInt16) MarshalTransaction(enc *transaction.Encoder) error {
+	return enc.EncodeNumber(uint16(num))
+}
+
+func (num UInt32) MarshalTransaction(enc *transaction.Encoder) error {
+	return enc.EncodeNumber(uint32(num))
+}
+
 func (num UInt64) MarshalTransaction(enc *transaction.Encoder) error {
 	return enc.EncodeNumber(uint64(num))
 }
+
+type WorkerInitializerType UInt8
+
+const (
+	WorkerInitializerTypeRefund WorkerInitializerType = iota
+	WorkerInitializerTypeVestingBalance
+	WorkerInitializerTypeBurn
+)
 
 const (
 	AssetTypeUndefined AssetType = -1
@@ -50,6 +70,13 @@ const (
 	SpaceTypeUndefined SpaceType = -1
 	SpaceTypeProtocol  SpaceType = iota
 	SpaceTypeImplementation
+)
+
+type PredicateType UInt8
+const (
+	PredicateAccountNameEqLit PredicateType = iota
+	PredicateAssetSymbolEqLit
+	PredicateBlockId
 )
 
 type ObjectType Int8
@@ -116,6 +143,55 @@ type VestingPolicyType UInt8
 const (
 	VestingPolicyTypeLinear VestingPolicyType = iota
 	VestingPolicyTypeCCD
+)
+
+type FeeParametersType UInt8
+
+const (
+	FeeParametersTypeTransfer FeeParametersType = iota
+	FeeParametersTypeLimitOrderCreate
+	FeeParametersTypeLimitOrderCancel
+	FeeParametersTypeCallOrderUpdate
+	FeeParametersTypeFillOrder
+	FeeParametersTypeAccountCreate
+	FeeParametersTypeAccountUpdate
+	FeeParametersTypeAccountWhitelist
+	FeeParametersTypeAccountUpgrade
+	FeeParametersTypeAccountTransfer
+	FeeParametersTypeAssetCreate
+	FeeParametersTypeAssetUpdate
+	FeeParametersTypeAssetUpdateBitasset
+	FeeParametersTypeAssetUpdateFeedProducers
+	FeeParametersTypeAssetIssue
+	FeeParametersTypeAssetReserve
+	FeeParametersTypeAssetFundFeePool
+	FeeParametersTypeAssetSettle
+	FeeParametersTypeAssetGlobalSettle
+	FeeParametersTypeAssetPublishFeed
+	FeeParametersTypeWitnessCreate
+	FeeParametersTypeWitnessUpdate
+	FeeParametersTypeProposalCreate
+	FeeParametersTypeProposalUpdate
+	FeeParametersTypeProposalDelete
+	FeeParametersTypeWithdrawPermissionCreate
+	FeeParametersTypeWithdrawPermissionUpdate
+	FeeParametersTypeWithdrawPermissionClaim
+	FeeParametersTypeWithdrawPermissionDelete
+	FeeParametersTypeCommitteeMemberCreate
+	FeeParametersTypeCommitteeMemberUpdate
+	FeeParametersTypeCommitteeMemberUpdateGlobalParameters
+	FeeParametersTypeVestingBalanceCreate
+	FeeParametersTypeVestingBalanceWithdraw
+	FeeParametersTypeWorkerCreate
+	FeeParametersTypeCustom
+	FeeParametersTypeAssert
+	FeeParametersTypeBalanceClaim
+	FeeParametersTypeOverrideTransfer
+	FeeParametersTypeTransferToBlind
+	FeeParametersTypeBlindTransfer
+	FeeParametersTypeTransferFromBlind
+	FeeParametersTypeAssetSettleCancel
+	FeeParametersTypeAssetClaimFees
 )
 
 

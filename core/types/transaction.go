@@ -32,6 +32,7 @@ func (tx *Transaction) MarshalTransaction(encoder *transaction.Encoder) error {
 
 	// Extensions are not supported yet.
 	enc.EncodeUVarint(0)
+
 	return enc.Err()
 }
 
