@@ -124,7 +124,8 @@ println(err)
 //getAccount(account_name) account, err := client.Database.GetAccountByName("spring123")
 println(account)
 
-wif := "5K1rav***" priv,_ := types.NewPrivateKeyFromWif(wif)
+wif := "5K1***" 
+priv,_ := types.NewPrivateKeyFromWif(wif)
 pubk := priv.PublicKey()
 strpub := pubk.String()
 println(strpub)
