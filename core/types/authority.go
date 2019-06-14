@@ -31,6 +31,10 @@ func (p Authority) MarshalTransaction(enc *transaction.Encoder) error {
 		return errors.Annotate(err, "encode KeyAuths")
 	}
 
+	if err := enc.Encode(p.AddressAuths); err != nil {
+		return errors.Annotate(err, "encode AddressAuths")
+	}
+
 	if err := enc.Encode(p.Extensions); err != nil {
 		return errors.Annotate(err, "encode Extensions")
 	}
