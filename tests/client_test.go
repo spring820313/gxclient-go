@@ -181,6 +181,7 @@ func TestClient_Register(t *testing.T) {
 }
 
 func TestClient_Transfer(t *testing.T) {
+	//client, err := gxc.NewClient(testNetHttp)
 	client, err := gxc.NewClient(testNetHttp)
 	require.Nil(t, err)
 
