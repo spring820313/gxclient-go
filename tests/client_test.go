@@ -6,7 +6,7 @@ import (
 	"log"
 	"testing"
 	gxc "gxclient-go"
-	"math/rand"
+	//"math/rand"
 	"encoding/json"
 	"gxclient-go/api/database"
 	"gxclient-go/core/sign"
@@ -181,8 +181,8 @@ func TestClient_Register(t *testing.T) {
 }
 
 func TestClient_Transfer(t *testing.T) {
+	client, err := gxc.NewClient(testNetWss)
 	//client, err := gxc.NewClient(testNetHttp)
-	client, err := gxc.NewClient(testNetHttp)
 	require.Nil(t, err)
 
 	account, err := client.Database.GetAccountByName("spring123")
@@ -242,13 +242,14 @@ func TestClient_Transfer(t *testing.T) {
 	memo.From = *keys[0]
 	memoKey := account456.Options.MemoKey
 	memo.To = memoKey
-	memo.Nonce = types.UInt64(rand.Int63())
+	memo.Nonce = 0//types.UInt64(rand.Int63())
 	if len(message) > 0 {
 		err := memo.Encrypt(fromPrivKey, message)
 		require.Nil(t, err)
 	} else {
 		memo = nil
 	}
+	//memo = nil
 
 	require.NoError(t, client.Transfer(cali123IDActiveKey, from, to, amount, fee, memo))
 }

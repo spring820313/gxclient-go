@@ -97,7 +97,7 @@ func (caller *Transport) Call(api caller.APIID, method string, args []interface{
 		return c.Error
 	}
 
-	if c.Reply != nil {
+	if c.Reply != nil && reply != nil {
 		if err := json.Unmarshal(*c.Reply, reply); err != nil {
 			return err
 		}

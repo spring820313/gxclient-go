@@ -34,7 +34,9 @@ func (api *API) BroadcastTransaction(tx *types.Transaction) error {
 		txs[0] = tx
 		return api.call("call", []interface{}{2, "broadcast_transaction", txs}, nil)
 	}
-	return api.call("broadcast_transaction", []interface{}{tx}, nil)
+
+	var reply interface{}
+	return api.call("broadcast_transaction", []interface{}{tx}, &reply)
 }
 
 func (api *API) BroadcastTransactionSynchronous(tx *types.Transaction) (*BroadcastResponse, error) {
