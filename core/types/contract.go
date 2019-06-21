@@ -137,8 +137,8 @@ type ContractAccountProperties struct {
 	MembershipExpirationDate	   	string `json:"membership_expiration_date"`
 	Registrar						string `json:"registrar"`
 	Referrer						string `json:"referrer"`
-	LifetimeReferrer				string `json:"lifetimeReferrer"`
-	NetworkFeePercentage			int64 `json:"networkFeePercentage"`
+	LifetimeReferrer				string `json:"lifetime_referrer"`
+	NetworkFeePercentage			int64 `json:"network_fee_percentage"`
 	LifetimeReferrerFeePercentage	int64 `json:"lifetime_referrer_fee_percentage"`
 	ReferrerRewardsPercentage		int64 `json:"referrer_rewards_percentage"`
 	Name 							string `json:"name"`
